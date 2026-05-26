@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProposalKit — Win more clients</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0f0e0c;
+  --paper:#faf8f4;
+  --cream:#f2ede3;
+  --gold:#c9a84c;
+  --gold-light:#e8d5a3;
+  --muted:#8a8070;
+  --border:#ddd8cc;
+  --white:#ffffff;
+  --red:#c0392b;
+  --green:#1a7a4a;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.5rem;border-bottom:1px solid var(--border);background:var(--paper);position:sticky;top:0;z-index:100;}
+.logo{font-family:'Playfair Display',serif;font-weight:700;font-size:22px;color:var(--ink);letter-spacing:-0.5px;}
+.logo span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:2rem;}
+.nav-links a{font-size:14px;color:var(--muted);text-decoration:none;transition:color 0.15s;}
+.nav-links a:hover{color:var(--ink);}
+.nav-cta{background:var(--ink);color:var(--white);padding:8px 20px;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;}
+.nav-cta:hover{background:var(--gold);color:var(--ink);}
+
+/* HERO */
+.hero{padding:6rem 2.5rem 4rem;max-width:900px;margin:0 auto;text-align:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--cream);border:1px solid var(--gold-light);color:var(--gold);font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px;margin-bottom:2rem;letter-spacing:0.3px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,4rem);font-weight:900;line-height:1.15;color:var(--ink);margin-bottom:1.5rem;letter-spacing:-1px;}
+.hero h1 em{color:var(--gold);font-style:normal;}
+.hero p{font-size:18px;color:var(--muted);max-width:560px;margin:0 auto 2.5rem;font-weight:300;line-height:1.7;}
+.hero-cta{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--white);padding:14px 32px;border-radius:8px;font-size:16px;font-weight:500;cursor:pointer;border:none;transition:all 0.2s;text-decoration:none;}
+.hero-cta:hover{background:var(--gold);color:var(--ink);transform:translateY(-1px);}
+.hero-sub{margin-top:1rem;font-size:13px;color:var(--muted);}
+
+/* STATS */
+.stats{display:flex;justify-content:center;gap:3rem;padding:3rem 2.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--cream);}
+.stat{text-align:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--ink);}
+.stat-lbl{font-size:13px;color:var(--muted);margin-top:2px;}
+
+/* APP SECTION */
+.app-section{max-width:760px;margin:4rem auto;padding:0 1.5rem;}
+.section-label{font-size:11px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.section-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--ink);margin-bottom:0.5rem;}
+.section-sub{font-size:15px;color:var(--muted);margin-bottom:2rem;}
+
+/* STEPS */
+.steps{display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;}
+.step{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--white);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step.active .step-num{background:var(--gold);color:var(--ink);}
+.step.done .step-num{background:var(--green);color:var(--white);}
+.step-arrow{color:var(--border);font-size:16px;}
+
+/* FORM */
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:2rem;margin-bottom:1.5rem;}
+.form-card h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-grid.single{grid-template-columns:1fr;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;}
+.field input,.field select,.field textarea{background:var(--paper);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;transition:border-color 0.15s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);}
+.field textarea{resize:vertical;min-height:100px;}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8070' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+
+/* PRICING WIDGET */
+.pricing-widget{background:var(--cream);border:1px solid var(--gold-light);border-radius:10px;padding:1.2rem 1.5rem;margin-top:1rem;}
+.pricing-label{font-size:11px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.pricing-range{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--ink);}
+.pricing-note{font-size:12px;color:var(--muted);margin-top:3px;}
+
+/* SUBMIT BTN */
+.submit-btn{width:100%;padding:14px;background:var(--ink);color:var(--white);border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.submit-btn:hover{background:var(--gold);color:var(--ink);}
+.submit-btn:disabled{opacity:0.6;cursor:not-allowed;}
+
+/* LOADING */
+.loading-state{text-align:center;padding:3rem;display:none;}
+.loading-state.show{display:block;}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1.5rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--ink);margin-bottom:0.5rem;}
+.loading-sub{font-size:13px;color:var(--muted);}
+
+/* PROPOSAL OUTPUT */
+.proposal-output{display:none;}
+.proposal-output.show{display:block;}
+.output-actions{display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.action-btn{display:flex;align-items:center;gap:7px;padding:10px 18px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--white);color:var(--ink);font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.action-btn:hover{background:var(--cream);}
+.action-btn.primary{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.action-btn.primary:hover{background:var(--gold);border-color:var(--gold);color:var(--ink);}
+
+/* PROPOSAL DOCUMENT */
+.proposal-doc{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.doc-header{background:var(--ink);color:var(--white);padding:2.5rem 3rem;}
+.doc-header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem;}
+.doc-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold);}
+.doc-badge{background:var(--gold);color:var(--ink);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;}
+.doc-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1.2;margin-bottom:0.5rem;}
+.doc-subtitle{font-size:14px;color:rgba(255,255,255,0.6);}
+.doc-body{padding:2.5rem 3rem;}
+.doc-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:1.5rem;background:var(--cream);border-radius:8px;margin-bottom:2rem;}
+.doc-meta-item label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:3px;}
+.doc-meta-item span{font-size:14px;font-weight:500;color:var(--ink);}
+.doc-section{margin-bottom:2rem;}
+.doc-section h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:0.8rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gold);display:inline-block;}
+.doc-section p,.doc-section li{font-size:14px;color:#3a3530;line-height:1.7;}
+.doc-section ul,.doc-section ol{padding-left:1.5rem;}
+.doc-section li{margin-bottom:0.4rem;}
+.pricing-table{width:100%;border-collapse:collapse;margin-top:0.8rem;}
+.pricing-table th{background:var(--ink);color:var(--white);padding:10px 14px;font-size:12px;font-weight:500;text-align:left;text-transform:uppercase;letter-spacing:0.4px;}
+.pricing-table td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:14px;}
+.pricing-table tr:last-child td{border-bottom:none;}
+.pricing-table .total-row td{font-weight:600;background:var(--cream);}
+.pricing-table .total-row .total-val{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);}
+.doc-footer{padding:1.5rem 3rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--cream);}
+.doc-footer-left{font-size:13px;color:var(--muted);}
+.doc-footer-right{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--gold);}
+
+/* ERROR */
+.error-msg{background:#fef0ef;border:1px solid #f5c6c3;border-radius:8px;padding:1rem 1.2rem;font-size:14px;color:var(--red);margin-bottom:1rem;display:none;}
+.error-msg.show{display:block;}
+
+/* FEATURES */
+.features{padding:5rem 2.5rem;background:var(--cream);border-top:1px solid var(--border);}
+.features-inner{max-width:900px;margin:0 auto;}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;}
+.feature{padding:1.5rem;background:var(--white);border:1px solid var(--border);border-radius:10px;}
+.feature-icon{font-size:1.5rem;margin-bottom:0.8rem;}
+.feature h4{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:0.5rem;}
+.feature p{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* PRICING */
+.pricing{padding:5rem 2.5rem;max-width:900px;margin:0 auto;}
+.pricing-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+.price-card{padding:2rem;background:var(--white);border:1px solid var(--border);border-radius:12px;position:relative;}
+.price-card.popular{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold);}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--ink);font-size:11px;font-weight:600;padding:3px 12px;border-radius:20px;white-space:nowrap;}
+.price-plan{font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.5rem;}
+.price-amount{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--ink);margin-bottom:0.3rem;}
+.price-amount span{font-size:14px;font-weight:400;color:var(--muted);}
+.price-desc{font-size:13px;color:var(--muted);margin-bottom:1.5rem;}
+.price-features{list-style:none;margin-bottom:1.5rem;}
+.price-features li{font-size:13px;color:#3a3530;padding:5px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;}
+.price-features li:last-child{border-bottom:none;}
+.price-features li::before{content:'✓';color:var(--green);font-weight:600;font-size:12px;flex-shrink:0;}
+.price-btn{width:100%;padding:10px;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;border:1px solid var(--border);background:var(--paper);color:var(--ink);}
+.price-card.popular .price-btn{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.price-card.popular .price-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--ink);}
+
+/* FOOTER */
+footer{padding:2rem 2.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.footer-logo{font-family:'Playfair Display',serif;font-weight:700;font-size:16px;color:var(--ink);}
+.footer-logo span{color:var(--gold);}
+.footer-copy{font-size:13px;color:var(--muted);}
+
+@media(max-width:700px){
+  .form-grid{grid-template-columns:1fr;}
+  .features-grid{grid-template-columns:1fr;}
+  .pricing-cards{grid-template-columns:1fr;}
+  .stats{flex-wrap:wrap;gap:1.5rem;}
+  .doc-meta{grid-template-columns:1fr 1fr;}
+  .doc-header,.doc-body,.doc-footer{padding:1.5rem;}
+  .doc-title{font-size:1.5rem;}
+  nav{padding:1rem;}
+  .hero{padding:3rem 1.5rem 2rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Proposal<span>Kit</span></div>
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <button class="nav-cta" onclick="scrollToApp()">Create proposal</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">✦ Built for Indian freelancers</div>
+  <h1>Win clients with<br><em>proposals that impress</em></h1>
+  <p>Answer 5 questions. Get a professional proposal with smart pricing — ready to send in 60 seconds.</p>
+  <button class="hero-cta" onclick="scrollToApp()">
+    Create your first proposal free
+    <span>→</span>
+  </button>
+  <p class="hero-sub">No signup needed · 3 free proposals/month</p>
+</section>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num">60s</div><div class="stat-lbl">To create a proposal</div></div>
+  <div class="stat"><div class="stat-num">40%</div><div class="stat-lbl">Higher win rate</div></div>
+  <div class="stat"><div class="stat-num">₹0</div><div class="stat-lbl">To start today</div></div>
+</div>
+
+<!-- APP -->
+<section class="app-section" id="how-it-works">
+  <div class="section-label">Create proposal</div>
+  <div class="section-title">Tell us about your project</div>
+  <div class="section-sub">We'll generate a professional proposal with smart pricing for the Indian market.</div>
+
+  <div class="steps">
+    <div class="step active" id="step1"><div class="step-num">1</div> Your details</div>
+    <div class="step-arrow">›</div>
+    <div class="step" id="step2"><div class="step-num">2</div> Project info</div>
+    <div class="step-arrow">›</div>
+    <div class="step" id="step3"><div class="step-num">3</div> Your proposal</div>
+  </div>
+
+  <div class="error-msg" id="error-msg">Please fill in all required fields before continuing.</div>
+
+  <!-- FORM -->
+  <div id="form-section">
+    <div class="form-card">
+      <h3>Your details</h3>
+      <div class="form-grid">
+        <div class="field">
+          <label>Your name *</label>
+          <input type="text" id="freelancer-name" placeholder="Rahul Sharma">
+        </div>
+        <div class="field">
+          <label>Your profession *</label>
+          <input type="text" id="freelancer-role" placeholder="UI/UX Designer">
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="freelancer-email" placeholder="rahul@gmail.com">
+        </div>
+        <div class="field">
+          <label>Phone</label>
+          <input type="tel" id="freelancer-phone" placeholder="+91 98765 43210">
+        </div>
+        <div class="field">
+          <label>Experience level *</label>
+          <select id="experience">
+            <option value="">Select level</option>
+            <option value="fresher">Fresher (0-1 years)</option>
+            <option value="junior">Junior (1-3 years)</option>
+            <option value="mid">Mid-level (3-6 years)</option>
+            <option value="senior">Senior (6+ years)</option>
+            <option value="expert">Expert / Consultant</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Your city</label>
+          <select id="freelancer-city">
+            <option value="Mumbai">Mumbai</option>
+            <option value="Delhi">Delhi / NCR</option>
+            <option value="Bengaluru">Bengaluru</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Pune">Pune</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h3>Project details</h3>
+      <div class="form-grid">
+        <div class="field">
+          <label>Client name *</label>
+          <input type="text" id="client-name" placeholder="Acme Technologies Pvt Ltd">
+        </div>
+        <div class="field">
+          <label>Client industry</label>
+          <select id="client-industry">
+            <option value="Technology">Technology / IT</option>
+            <option value="E-commerce">E-commerce</option>
+            <option value="Finance">Finance / Fintech</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Education">Education / EdTech</option>
+            <option value="Real Estate">Real Estate</option>
+            <option value="Retail">Retail</option>
+            <option value="Manufacturing">Manufacturing</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Service type *</label>
+          <select id="service-type">
+            <option value="">Select service</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Mobile App Development">Mobile App Development</option>
+            <option value="UI/UX Design">UI/UX Design</option>
+            <option value="Graphic Design">Graphic Design</option>
+            <option value="Digital Marketing">Digital Marketing / SEO</option>
+            <option value="Content Writing">Content Writing</option>
+            <option value="Video Editing">Video Editing</option>
+            <option value="Data Analysis">Data Analysis</option>
+            <option value="Accounting / Finance">Accounting / Finance</option>
+            <option value="Business Consulting">Business Consulting</option>
+            <option value="Social Media Management">Social Media Management</option>
+            <option value="Photography">Photography</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Project duration *</label>
+          <select id="duration">
+            <option value="">Select duration</option>
+            <option value="1 week">1 week</option>
+            <option value="2 weeks">2 weeks</option>
+            <option value="1 month">1 month</option>
+            <option value="2 months">2 months</option>
+            <option value="3 months">3 months</option>
+            <option value="6 months">6 months</option>
+            <option value="Ongoing / Retainer">Ongoing / Retainer</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid single" style="margin-top:1rem;">
+        <div class="field">
+          <label>What does the client need? *</label>
+          <textarea id="project-desc" placeholder="Describe what you'll be building or delivering. E.g. 'A responsive e-commerce website with payment gateway, admin panel, and mobile app for an online clothing brand targeting young Indians.'"></textarea>
+        </div>
+        <div class="field">
+          <label>Key deliverables (optional)</label>
+          <textarea id="deliverables" placeholder="List specific deliverables. E.g. '5 pages website, 2 revisions, source files, 30 days support'" style="min-height:70px;"></textarea>
+        </div>
+      </div>
+
+      <div class="pricing-widget" id="pricing-hint" style="display:none;">
+        <div class="pricing-label">✦ Suggested pricing range</div>
+        <div class="pricing-range" id="pricing-display">—</div>
+        <div class="pricing-note" id="pricing-note">Based on Indian market rates for your experience level</div>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="generate-btn" onclick="generateProposal()">
+      <span>✦</span> Generate my proposal
+    </button>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-state" id="loading-state">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loading-text">Crafting your proposal...</div>
+    <div class="loading-sub" id="loading-sub">Writing executive summary</div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="proposal-output" id="proposal-output">
+    <div class="output-actions">
+      <button class="action-btn primary" onclick="printProposal()">⬇ Download PDF</button>
+      <button class="action-btn" onclick="copyProposal()">⎘ Copy text</button>
+      <button class="action-btn" onclick="resetForm()">↺ New proposal</button>
+    </div>
+    <div class="proposal-doc" id="proposal-doc">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="section-label" style="text-align:center;">Why ProposalKit</div>
+    <div class="section-title" style="text-align:center;font-family:'Playfair Display',serif;font-size:1.8rem;">Built for how India works</div>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">🎯</div>
+        <h4>Smart Indian pricing</h4>
+        <p>Pricing suggestions calibrated to Indian market rates by city, industry and experience level. Stop undercharging.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h4>60-second proposals</h4>
+        <p>Answer 5 questions. AI writes the executive summary, scope, timeline, and pricing breakdown instantly.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📄</div>
+        <h4>PDF ready to send</h4>
+        <p>Download a professionally formatted PDF with your branding. Looks like it cost ₹50,000 to design.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🧾</div>
+        <h4>GST invoicing</h4>
+        <p>Convert any proposal into a GST-compliant invoice with one click. All calculations done automatically.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📧</div>
+        <h4>Follow-up templates</h4>
+        <p>Get email templates for sending the proposal, following up, and closing the deal professionally.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <h4>Win rate tracking</h4>
+        <p>See which proposals win and which don't. Improve your pitch with data over time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label">Pricing</div>
+  <div class="section-title" style="font-family:'Playfair Display',serif;font-size:1.8rem;">Simple, honest pricing</div>
+  <div class="pricing-cards">
+    <div class="price-card">
+      <div class="price-plan">Free</div>
+      <div class="price-amount">₹0</div>
+      <div class="price-desc">To get started</div>
+      <ul class="price-features">
+        <li>3 proposals / month</li>
+        <li>PDF download</li>
+        <li>Smart pricing hints</li>
+        <li>Basic templates</li>
+      </ul>
+      <button class="price-btn" onclick="scrollToApp()">Start free</button>
+    </div>
+    <div class="price-card popular">
+      <div class="popular-badge">Most popular</div>
+      <div class="price-plan">Pro</div>
+      <div class="price-amount">₹299 <span>/ month</span></div>
+      <div class="price-desc">For serious freelancers</div>
+      <ul class="price-features">
+        <li>Unlimited proposals</li>
+        <li>Custom branding</li>
+        <li>GST invoicing</li>
+        <li>Follow-up email templates</li>
+        <li>Proposal tracking</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="price-btn" onclick="scrollToApp()">Start 7-day trial</button>
+    </div>
+    <div class="price-card">
+      <div class="price-plan">Business</div>
+      <div class="price-amount">₹799 <span>/ month</span></div>
+      <div class="price-desc">For agencies & teams</div>
+      <ul class="price-features">
+        <li>Everything in Pro</li>
+        <li>5 team members</li>
+        <li>Client portal</li>
+        <li>E-signature</li>
+        <li>Analytics dashboard</li>
+        <li>API access</li>
+      </ul>
+      <button class="price-btn" onclick="scrollToApp()">Contact us</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Proposal<span>Kit</span></div>
+  <div class="footer-copy">© 2026 ProposalKit · Built for Indian freelancers</div>
+</footer>
+
+<script>
+// ── PRICING LOGIC ────────────────────────────────────────────────
+const PRICING = {
+  'Web Development':         { fresher:[15000,40000], junior:[40000,90000], mid:[80000,200000], senior:[150000,400000], expert:[300000,800000] },
+  'Mobile App Development':  { fresher:[20000,50000], junior:[50000,120000], mid:[100000,300000], senior:[250000,600000], expert:[400000,1200000] },
+  'UI/UX Design':            { fresher:[10000,25000], junior:[25000,60000], mid:[50000,150000], senior:[120000,300000], expert:[200000,600000] },
+  'Graphic Design':          { fresher:[5000,15000], junior:[15000,40000], mid:[35000,90000], senior:[75000,200000], expert:[150000,400000] },
+  'Digital Marketing':       { fresher:[8000,20000], junior:[20000,50000], mid:[45000,120000], senior:[100000,250000], expert:[200000,500000] },
+  'Content Writing':         { fresher:[5000,12000], junior:[12000,30000], mid:[25000,70000], senior:[60000,150000], expert:[100000,300000] },
+  'Video Editing':           { fresher:[8000,20000], junior:[20000,50000], mid:[40000,100000], senior:[80000,200000], expert:[150000,400000] },
+  'Data Analysis':           { fresher:[15000,35000], junior:[35000,80000], mid:[70000,180000], senior:[150000,350000], expert:[250000,700000] },
+  'Accounting / Finance':    { fresher:[10000,25000], junior:[25000,60000], mid:[50000,150000], senior:[120000,300000], expert:[200000,500000] },
+  'Business Consulting':     { fresher:[15000,40000], junior:[40000,100000], mid:[80000,250000], senior:[200000,600000], expert:[400000,1500000] },
+  'Social Media Management': { fresher:[8000,20000], junior:[20000,50000], mid:[40000,100000], senior:[80000,200000], expert:[150000,400000] },
+  'Photography':             { fresher:[5000,15000], junior:[15000,40000], mid:[35000,90000], senior:[75000,200000], expert:[150000,400000] },
+};
+
+const CITY_MULTIPLIER = {
+  'Mumbai':1.2, 'Delhi':1.15, 'Bengaluru':1.15, 'Hyderabad':1.05, 'Pune':1.0, 'Chennai':1.0, 'Other':0.9
+};
+
+const DURATION_MULTIPLIER = {
+  '1 week':0.3, '2 weeks':0.5, '1 month':1.0, '2 months':1.8, '3 months':2.5, '6 months':4.5, 'Ongoing / Retainer':1.2
+};
+
+function formatINR(amount) {
+  if (amount >= 100000) return '₹' + (amount/100000).toFixed(1) + 'L';
+  if (amount >= 1000) return '₹' + Math.round(amount/1000) + 'K';
+  return '₹' + amount;
+}
+
+function updatePricing() {
+  const service = document.getElementById('service-type').value;
+  const experience = document.getElementById('experience').value;
+  const city = document.getElementById('freelancer-city').value;
+  const duration = document.getElementById('duration').value;
+
+  const widget = document.getElementById('pricing-hint');
+  if (!service || !experience || !duration) { widget.style.display='none'; return; }
+
+  const base = PRICING[service]?.[experience];
+  if (!base) { widget.style.display='none'; return; }
+
+  const cityMult = CITY_MULTIPLIER[city] || 1.0;
+  const durMult = DURATION_MULTIPLIER[duration] || 1.0;
+
+  let low = Math.round(base[0] * cityMult * durMult / 1000) * 1000;
+  let high = Math.round(base[1] * cityMult * durMult / 1000) * 1000;
+
+  document.getElementById('pricing-display').textContent = formatINR(low) + ' – ' + formatINR(high);
+  document.getElementById('pricing-note').textContent = `Based on ${city} rates for ${experience}-level ${service.toLowerCase()}`;
+  widget.style.display='block';
+}
+
+['service-type','experience','freelancer-city','duration'].forEach(id => {
+  document.getElementById(id).addEventListener('change', updatePricing);
+});
+
+// ── GENERATE PROPOSAL ────────────────────────────────────────────
+async function generateProposal() {
+  const name = document.getElementById('freelancer-name').value.trim();
+  const role = document.getElementById('freelancer-role').value.trim();
+  const client = document.getElementById('client-name').value.trim();
+  const service = document.getElementById('service-type').value;
+  const duration = document.getElementById('duration').value;
+  const desc = document.getElementById('project-desc').value.trim();
+  const experience = document.getElementById('experience').value;
+
+  const errEl = document.getElementById('error-msg');
+  if (!name || !role || !client || !service || !duration || !desc || !experience) {
+    errEl.textContent = 'Please fill in all required fields (marked with *).';
+    errEl.classList.add('show');
+    return;
+  }
+  errEl.classList.remove('show');
+
+  const email = document.getElementById('freelancer-email').value.trim();
+  const phone = document.getElementById('freelancer-phone').value.trim();
+  const city = document.getElementById('freelancer-city').value;
+  const industry = document.getElementById('client-industry').value;
+  const deliverables = document.getElementById('deliverables').value.trim();
+
+  // Get pricing range
+  const base = PRICING[service]?.[experience];
+  const cityMult = CITY_MULTIPLIER[city] || 1.0;
+  const durMult = DURATION_MULTIPLIER[duration] || 1.0;
+  let priceLow = base ? Math.round(base[0]*cityMult*durMult/1000)*1000 : 50000;
+  let priceHigh = base ? Math.round(base[1]*cityMult*durMult/1000)*1000 : 150000;
+  const suggestedPrice = Math.round((priceLow + priceHigh) / 2 / 1000) * 1000;
+
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('loading-state').classList.add('show');
+  document.getElementById('step2').classList.add('active');
+
+  const loadingMessages = [
+    ['Writing executive summary...', 'Tailoring the opening for your client'],
+    ['Building project scope...', 'Outlining deliverables and milestones'],
+    ['Calculating timeline...', 'Creating a realistic project schedule'],
+    ['Finalising pricing...', 'Benchmarking against Indian market rates'],
+    ['Polishing the proposal...', 'Final formatting and review'],
+  ];
+  let msgIdx = 0;
+  const msgInterval = setInterval(() => {
+    if (msgIdx < loadingMessages.length) {
+      document.getElementById('loading-text').textContent = loadingMessages[msgIdx][0];
+      document.getElementById('loading-sub').textContent = loadingMessages[msgIdx][1];
+      msgIdx++;
+    }
+  }, 1200);
+
+  try {
+    const prompt = `You are a professional business proposal writer for Indian freelancers. Generate a detailed, persuasive business proposal.
+
+Freelancer: ${name} (${role}, ${experience} level, based in ${city})
+Client: ${client} (${industry} industry)
+Service: ${service}
+Duration: ${duration}
+Project description: ${desc}
+${deliverables ? 'Key deliverables: ' + deliverables : ''}
+Suggested price: ₹${suggestedPrice.toLocaleString('en-IN')} (range: ₹${priceLow.toLocaleString('en-IN')} - ₹${priceHigh.toLocaleString('en-IN')})
+
+Write a complete proposal with these sections. Return ONLY a JSON object with these exact keys:
+{
+  "executive_summary": "2-3 compelling paragraphs about understanding the client's need and your unique value proposition",
+  "problem_statement": "1-2 paragraphs about the client's current challenges and what's at stake",
+  "proposed_solution": "2-3 paragraphs about your specific approach and methodology",
+  "deliverables": ["deliverable 1", "deliverable 2", "deliverable 3", "deliverable 4", "deliverable 5"],
+  "timeline": [{"phase": "Phase name", "duration": "X weeks", "description": "What happens"}],
+  "pricing_items": [{"item": "Service name", "description": "Brief desc", "amount": 00000}],
+  "pricing_total": 00000,
+  "why_choose_me": "2 paragraphs about your specific expertise and why you're the right choice",
+  "next_steps": ["Step 1", "Step 2", "Step 3"],
+  "validity": "30 days"
+}
+
+Make it specific, professional and persuasive. Use Indian business language and context. Pricing total should be around ₹${suggestedPrice.toLocaleString('en-IN')}.`;
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    clearInterval(msgInterval);
+
+    let proposalData;
+    try {
+      const text = data.content[0].text.replace(/```json|```/g, '').trim();
+      proposalData = JSON.parse(text);
+    } catch(e) {
+      throw new Error('Failed to parse proposal data');
+    }
+
+    document.getElementById('loading-state').classList.remove('show');
+    document.getElementById('step2').classList.add('done');
+    document.getElementById('step3').classList.add('active');
+
+    renderProposal(proposalData, { name, role, email, phone, city, client, industry, service, duration, suggestedPrice });
+
+  } catch(e) {
+    clearInterval(msgInterval);
+    document.getElementById('loading-state').classList.remove('show');
+    document.getElementById('form-section').style.display = 'block';
+    const errEl = document.getElementById('error-msg');
+    errEl.textContent = 'Something went wrong. Please check your connection and try again.';
+    errEl.classList.add('show');
+  }
+}
+
+function renderProposal(data, meta) {
+  const today = new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+  const validUntil = new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+
+  const deliverablesList = (data.deliverables || []).map(d => `<li>${d}</li>`).join('');
+  const timelineRows = (data.timeline || []).map(t => `
+    <div style="display:flex;gap:1rem;padding:0.8rem 0;border-bottom:1px solid var(--border);">
+      <div style="min-width:120px;font-weight:500;font-size:13px;color:var(--gold);">${t.phase}</div>
+      <div style="min-width:80px;font-size:13px;color:var(--muted);">${t.duration}</div>
+      <div style="font-size:13px;color:#3a3530;">${t.description}</div>
+    </div>`).join('');
+
+  const pricingRows = (data.pricing_items || []).map(p => `
+    <tr>
+      <td><strong>${p.item}</strong><br><span style="font-size:12px;color:var(--muted);">${p.description}</span></td>
+      <td style="text-align:right;font-weight:500;">₹${(p.amount||0).toLocaleString('en-IN')}</td>
+    </tr>`).join('');
+
+  const total = data.pricing_total || meta.suggestedPrice;
+  const gst = Math.round(total * 0.18);
+  const grandTotal = total + gst;
+
+  const nextSteps = (data.next_steps || []).map((s,i) => `<li>${s}</li>`).join('');
+
+  document.getElementById('proposal-doc').innerHTML = `
+    <div class="doc-header">
+      <div class="doc-header-top">
+        <div class="doc-logo">ProposalKit</div>
+        <div class="doc-badge">Proposal</div>
+      </div>
+      <div class="doc-title">Proposal for ${meta.client}</div>
+      <div class="doc-subtitle">${meta.service} · Prepared by ${meta.name}</div>
+    </div>
+    <div class="doc-body">
+      <div class="doc-meta">
+        <div class="doc-meta-item"><label>Prepared by</label><span>${meta.name}</span></div>
+        <div class="doc-meta-item"><label>Prepared for</label><span>${meta.client}</span></div>
+        <div class="doc-meta-item"><label>Date</label><span>${today}</span></div>
+        <div class="doc-meta-item"><label>Service</label><span>${meta.service}</span></div>
+        <div class="doc-meta-item"><label>Timeline</label><span>${meta.duration}</span></div>
+        <div class="doc-meta-item"><label>Valid until</label><span>${validUntil}</span></div>
+      </div>
+
+      <div class="doc-section">
+        <h3>Executive Summary</h3>
+        <p>${(data.executive_summary||'').replace(/\n/g,'</p><p style="margin-top:0.8rem;">')}</p>
+      </div>
+
+      <div class="doc-section">
+        <h3>Understanding Your Needs</h3>
+        <p>${(data.problem_statement||'').replace(/\n/g,'</p><p style="margin-top:0.8rem;">')}</p>
+      </div>
+
+      <div class="doc-section">
+        <h3>Proposed Solution</h3>
+        <p>${(data.proposed_solution||'').replace(/\n/g,'</p><p style="margin-top:0.8rem;">')}</p>
+      </div>
+
+      <div class="doc-section">
+        <h3>Deliverables</h3>
+        <ul>${deliverablesList}</ul>
+      </div>
+
+      <div class="doc-section">
+        <h3>Project Timeline</h3>
+        <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;padding:0 1rem;">
+          ${timelineRows}
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <h3>Investment</h3>
+        <table class="pricing-table">
+          <thead><tr><th>Service</th><th style="text-align:right;">Amount</th></tr></thead>
+          <tbody>
+            ${pricingRows}
+            <tr><td style="padding:6px 14px;"></td><td></td></tr>
+            <tr><td style="padding:8px 14px;font-size:13px;color:var(--muted);">Subtotal</td><td style="text-align:right;padding:8px 14px;font-size:13px;">₹${total.toLocaleString('en-IN')}</td></tr>
+            <tr><td style="padding:8px 14px;font-size:13px;color:var(--muted);">GST (18%)</td><td style="text-align:right;padding:8px 14px;font-size:13px;">₹${gst.toLocaleString('en-IN')}</td></tr>
+            <tr class="total-row"><td>Total Investment</td><td class="total-val" style="text-align:right;">₹${grandTotal.toLocaleString('en-IN')}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="doc-section">
+        <h3>Why Choose Me</h3>
+        <p>${(data.why_choose_me||'').replace(/\n/g,'</p><p style="margin-top:0.8rem;">')}</p>
+      </div>
+
+      <div class="doc-section">
+        <h3>Next Steps</h3>
+        <ol>${nextSteps}</ol>
+      </div>
+    </div>
+    <div class="doc-footer">
+      <div class="doc-footer-left">
+        <strong>${meta.name}</strong><br>
+        ${meta.role}${meta.email ? ' · ' + meta.email : ''}${meta.phone ? ' · ' + meta.phone : ''}
+      </div>
+      <div class="doc-footer-right">₹${grandTotal.toLocaleString('en-IN')}</div>
+    </div>
+  `;
+
+  document.getElementById('proposal-output').classList.add('show');
+  document.getElementById('proposal-output').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function printProposal() {
+  const doc = document.getElementById('proposal-doc').innerHTML;
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><title>Proposal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#fff;color:#0f0e0c;font-size:14px;}
+    :root{--ink:#0f0e0c;--paper:#faf8f4;--cream:#f2ede3;--gold:#c9a84c;--gold-light:#e8d5a3;--muted:#8a8070;--border:#ddd8cc;--white:#ffffff;--red:#c0392b;--green:#1a7a4a;}
+    .doc-header{background:#0f0e0c;color:#fff;padding:2rem 2.5rem;}
+    .doc-header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;}
+    .doc-logo{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#c9a84c;}
+    .doc-badge{background:#c9a84c;color:#0f0e0c;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;}
+    .doc-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;margin-bottom:0.3rem;}
+    .doc-subtitle{font-size:13px;color:rgba(255,255,255,0.6);}
+    .doc-body{padding:2rem 2.5rem;}
+    .doc-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:1rem;background:#f2ede3;border-radius:6px;margin-bottom:1.5rem;}
+    .doc-meta-item label{font-size:10px;font-weight:500;color:#8a8070;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:2px;}
+    .doc-meta-item span{font-size:13px;font-weight:500;}
+    .doc-section{margin-bottom:1.5rem;}
+    .doc-section h3{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:2px solid #c9a84c;display:inline-block;}
+    .doc-section p,.doc-section li{font-size:13px;line-height:1.65;}
+    .doc-section ul,.doc-section ol{padding-left:1.2rem;}
+    .doc-section li{margin-bottom:0.3rem;}
+    .pricing-table{width:100%;border-collapse:collapse;}
+    .pricing-table th{background:#0f0e0c;color:#fff;padding:8px 12px;font-size:11px;text-align:left;text-transform:uppercase;}
+    .pricing-table td{padding:8px 12px;border-bottom:1px solid #ddd8cc;font-size:13px;}
+    .pricing-table .total-row td{font-weight:600;background:#f2ede3;}
+    .pricing-table .total-val{font-family:'Playfair Display',serif;font-size:1rem;color:#c9a84c;}
+    .doc-footer{padding:1.2rem 2.5rem;border-top:1px solid #ddd8cc;display:flex;justify-content:space-between;align-items:center;background:#f2ede3;}
+    .doc-footer-left{font-size:12px;color:#8a8070;}
+    .doc-footer-right{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:#c9a84c;}
+    @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+  </style></head><body>${doc}</body></html>`);
+  win.document.close();
+  setTimeout(() => win.print(), 500);
+}
+
+function copyProposal() {
+  const text = document.getElementById('proposal-doc').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = '⎘ Copy text', 2000);
+  });
+}
+
+function resetForm() {
+  document.getElementById('proposal-output').classList.remove('show');
+  document.getElementById('form-section').style.display = 'block';
+  document.getElementById('step2').classList.remove('active','done');
+  document.getElementById('step3').classList.remove('active');
+  window.scrollTo({ top: document.getElementById('how-it-works').offsetTop - 80, behavior:'smooth' });
+}
+
+function scrollToApp() {
+  document.getElementById('how-it-works').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+</script>
+</body>
+</html>
